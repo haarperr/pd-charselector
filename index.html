@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        .charSlot {
+            opacity: 0.75;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <div id="index">
+        <div class="jumbotron mt-5 bg-dark text-light">
+            <img class="d-flex mx-auto" src="./img/logo.png" style="width: 128px;"/>
+            <h1 class="text-center">Welcome to <span style="color: cornflowerblue;">Paradise RP</span></h1>
+            <h3 class="text-center">Press <span style="color: cornflowerblue;">ENTER</span> to begin.</h3>
+        </div>
+        
+        <div class="card mx-auto bg-dark text-light" style="width: 40%;">
+            <div class="card-body">
+                <h5 class="card-title text-center" style="color: cornflowerblue; margin-bottom: -.75rem;">Changelog/Rules</h5>
+                <hr class="mb-2">
+                <h6 class="card-subtitle mb-2">15/03/2020</h6>
+                <ul class="mt-2">
+                    <li class="card-text" style="font-size: .75rem;">Welcome to Paradise Roleplay v2.</li>
+                    <li class="card-text" style="font-size: .75rem;">Read all the rules.</li>
+                    <li class="card-text" style="font-size: .75rem;">Enjoy your stay.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="index2" style="display: none; height: 100vh; width: 100vw;">
+        <div class="d-flex w-100 h-100">
+            <div data-slot="1" class="charSlot card mx-auto my-auto text-center bg-dark text-light" style="width: 20rem; height: 24rem;">
+                <div class="card-body">
+                    <h5 class="card-title">+</h5>
+                    <hr>
+                    <p class="lead">Create a new charater</p>
+                </div>
+            </div>
+            <div data-slot="2" class="charSlot card mx-auto my-auto text-center bg-dark text-light" style="width: 20rem; height: 24rem;">
+                <div class="card-body">
+                    <h5 class="card-title">+</h5>
+                    <hr>
+                    <p class="lead">Create a new charater</p>
+                </div>
+            </div>
+            <div data-slot="3" class="charSlot card mx-auto my-auto text-center bg-dark text-light" style="width: 20rem; height: 24rem;">
+                <div class="card-body">
+                    <h5 class="card-title">+</h5>
+                    <hr>
+                    <p class="lead">Create a new charater</p>
+                </div>
+            </div>
+            <div data-slot="4" class="charSlot card mx-auto my-auto text-center bg-dark text-light" style="width: 20rem; height: 24rem;">
+                <div class="card-body">
+                    <h5 class="card-title">+</h5>
+                    <hr>
+                    <p class="lead">Create a new charater</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loading" style="display: none;">
+        <div class="jumbotron mt-5 bg-dark text-light">
+            <img class="d-flex mx-auto" src="./img/logo.png" style="width: 128px;"/>
+            <h1 class="text-center">Welcome to <span style="color: cornflowerblue;">Paradise RP</span></h1>
+            <h3 class="text-center">Press <span style="color: cornflowerblue;">ENTER</span> to begin.</h3>
+        </div>
+
+        <div class="container mx-auto mt-3 text-center"> 
+            <div class="spinner-border" role="status"></div>          
+            <p id="l-text" class="mt-2">Loading user data...</p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script>
+        $(() => {
+            document.addEventListener('keydown', (key) => {
+                if (key.which === 13) {
+                    $('#index').hide();
+                    $('#loading').show();
+                    setTimeout(() => {
+                        $('#l-text').html('Loading characters...');
+                        setTimeout(() => {
+                            $('#loading').hide();
+                            $('#index2').show();
+                        }, 2500);
+                    }, 2500);
+                }
+            });
+
+            let divs = document.getElementsByClassName("charSlot");
+            for(let i = 0; i < 4; i++) {
+                // console.log(divs[i])
+                $(divs[i]).hover(() => {
+                    $(divs[i]).css('opacity', '0.25');
+                }, () => {
+                    $(divs[i]).css('opacity', '0.75');
+                });
+            }
+
+            // 
+            // console.log(divs[0].getAttribute('data-slot'))
+
+            // $('#charSlot').hover(() => {
+            //    alert('oi')
+            // });
+        });
+    </script>
+</body>
+</html>
