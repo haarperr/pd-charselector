@@ -38,27 +38,27 @@
         <div class="d-flex w-100 h-100">
             <div data-slot="1" class="charSlot card mx-auto my-auto text-center bg-dark text-light" style="width: 20vw; height: 40vh;">
                 <div class="card-body">
-                    <h5 class="card-title">+</h5>
+                    <h5 class="createChar card-title">+</h5>
                     <hr>
                     <p class="lead">Create a new charater</p>
                 </div>
             </div>
             <div data-slot="2" class="charSlot card mx-auto my-auto text-center bg-dark text-light" style="width: 20vw; height: 40vh;">
-                <div class="card-body">
+                <div class="createChar card-body">
                     <h5 class="card-title">+</h5>
                     <hr>
                     <p class="lead">Create a new charater</p>
                 </div>
             </div>
             <div data-slot="3" class="charSlot card mx-auto my-auto text-center bg-dark text-light" style="width: 20vw; height: 40vh;">
-                <div class="card-body">
+                <div class="createChar card-body">
                     <h5 class="card-title">+</h5>
                     <hr>
                     <p class="lead">Create a new charater</p>
                 </div>
             </div>
             <div data-slot="4" class="charSlot card mx-auto my-auto text-center bg-dark text-light" style="width: 20vw; height: 40vh;">
-                <div class="card-body">
+                <div class="createChar card-body">
                     <h5 class="card-title">+</h5>
                     <hr>
                     <p class="lead">Create a new charater</p>
@@ -86,8 +86,11 @@
 
     <script>
         $(() => {
+            let ok = false;
+
             document.addEventListener('keydown', (key) => {
-                if (key.which === 13) {
+                if (key.which === 13 && ok === false) {
+                    ok = true;
                     $('#index').hide();
                     $('#loading').show();
                     setTimeout(() => {
@@ -104,6 +107,16 @@
             for(let i = 0; i < 4; i++) {
                 // console.log(divs[i])
                 $(divs[i]).hover(() => {
+                    $(divs[i]).css('opacity', '0.25');
+                }, () => {
+                    $(divs[i]).css('opacity', '0.75');
+                });
+            }
+
+            let create = document.getElementsByClassName("createChar");
+            for(let i = 0; i < 4; i++) {
+                // console.log(divs[i])
+                $(divs[i]).click(() => {
                     $(divs[i]).css('opacity', '0.25');
                 }, () => {
                     $(divs[i]).css('opacity', '0.75');
