@@ -8,6 +8,9 @@
         .charSlot {
             opacity: 0.75;
         }
+        .newChar {
+            cursor: pointer;
+        }
     </style>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -34,53 +37,22 @@
         </div>
     </div>
 
-    <div id="index2" style="display: none; height: 100vh; width: 100vw;">
-        <div class="d-flex w-100 h-100">
-            <div data-slot="1" class="charSlot card mx-auto my-auto text-center bg-dark text-light" style="width: 20vw; height: 40vh;">
-                <div class="card-body">
-                    <h5 class="createChar card-title">+</h5>
-                    <hr>
-                    <p class="lead">Create a new charater</p>
-                </div>
-            </div>
-            <div data-slot="2" class="charSlot card mx-auto my-auto text-center bg-dark text-light" style="width: 20vw; height: 40vh;">
-                <div class="card-body">
-                    <h5 class="createChar card-title">+</h5>
-                    <hr>
-                    <p class="lead">Create a new charater</p>
-                </div>
-            </div>
-            <div data-slot="3" class="charSlot card mx-auto my-auto text-center bg-dark text-light" style="width: 20vw; height: 40vh;">
-                <div class="card-body">
-                    <h5 class="createChar card-title">+</h5>
-                    <hr>
-                    <p class="lead">Create a new charater</p>
-                </div>
-            </div>
-            <div data-slot="4" class="charSlot card mx-auto my-auto text-center bg-dark text-light" style="width: 20vw; height: 40vh;">
-                <div class="card-body">
-                    <h5 class="createChar card-title">+</h5>
-                    <hr>
-                    <p class="lead">Create a new charater</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="index2" style="display: none; height: 100vh; width: 100vw;"><div class="d-flex w-100 h-100"></div></div>
 
     <div id="loading" style="display: none;">
-        <div class="jumbotron mt-5 bg-dark text-light">
+        <!-- <div class="jumbotron mt-5 bg-dark text-light">
             <img class="d-flex mx-auto" src="./img/logo.png" style="width: 128px;"/>
             <h1 class="text-center">Welcome to <span style="color: cornflowerblue;">Paradise RP</span></h1>
-            <h5 class="text-center">We're just loading some stuff. It shouldn't take long</h5>
-        </div>
+            <h5 class="text-center">Hang on, we're just loading some stuff.</h5>
+        </div> -->
 
-        <div class="container mx-auto mt-3 text-center"> 
-            <div class="spinner-border" role="status"></div>          
+        <div class="container mx-auto mt-5 text-center"> 
+            <div class="spinner-border mt-5" role="status"></div>          
             <p id="l-text" class="mt-2">Fetching user data...</p>
         </div>
     </div>
 
-    <div class="modal" id="charForm" tabindex="-1" role="dialog">
+    <div class="modal fade" id="charForm" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -98,6 +70,13 @@
                         <div class="form-group">
                             <label for="charName">Character Surename</label>
                             <input type="text" class="form-control" id="charSName" placeholder="Doe" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="charGender">Character Gender</label>
+                            <select class="form-control" id="charGender" required >
+                                <option>Female</option>
+                                <option>Male</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="charAge">Character Age</label>
@@ -120,12 +99,73 @@
     <script>
         $(() => {
             let ok = false;
+            let chars = [['John Doe', '23', 'Male'], null, ['John Doe2', '24', 'Male'], null]
 
             document.addEventListener('keydown', (key) => {
                 if (key.which === 13 && ok === false) {
                     ok = true;
                     $('#index').hide();
                     $('#loading').show();
+
+                    for(let i in chars) {
+                        // console.log(chars[i]);
+                        if(chars[i] === null){
+                            $('#index2').children('div').append(
+                                '<div id="slot' + i + '" class="charSlot newChar card mx-auto my-auto text-center bg-dark text-light" style="width: 20vw; height: 50vh;">' +
+                                    '<div class="card-body">' +
+                                        '<h5 class="createChar card-title">+</h5>' +
+                                        '<hr>' +
+                                        '<p class="lead">Create a new charater</p>' +
+                                    '</div>' +
+                                '</div>'
+                            );
+                        } else {
+                            $('#index2').children('div').append(
+                                '<div id="slot' + i + '" class="charSlot card mx-auto my-auto text-center bg-dark text-light" style="width: 20vw; height: 50vh;">' +
+                                    '<div class="card-body">' +
+                                        '<h5 class="createChar card-title">' + chars[i][0] + '</h5>' +
+                                        '<hr>' +
+                                        '<p class="lead">Age: ' + chars[i][1] + '</p>' +
+                                        '<p class="lead">Gender: ' + chars[i][2] + '</p>' +
+                                    '</div>' +
+                                    '<div class="card-footer">' +
+                                        '<button class="charPlay btn btn-success mr-3">Play</button>' +
+                                        '<button class="charDelete btn btn-danger">Delete</button>' +
+                                    '</div>' +
+                                '</div>'
+                            );
+                            $('#slot' + i).removeClass('newChar')
+                        }
+                    }
+
+                    const play = document.getElementsByClassName('charPlay');
+                    for(let i=0;i<play.length;i++){
+                        $(play[i]).click(() => {
+                            console.log('play ' + play[i].parentElement.parentElement.id)
+                        })
+                    }
+
+                    const del = document.getElementsByClassName('charDelete');
+                    for(let i=0;i<del.length;i++){
+                        $(del[i]).click(() => {
+                            console.log('delete ' + del[i].parentElement.parentElement.id)
+                        })
+                    }
+
+                    const divs = document.getElementsByClassName('newChar');
+                    for(let i = 0; i < 4; i++) {
+                        $(divs[i]).hover(() => {
+                            $(divs[i]).css('opacity', '0.25');
+                        }, () => {
+                            $(divs[i]).css('opacity', '0.75');
+                        });
+
+                        $(divs[i]).click(() => {
+                            $('#charForm').modal('toggle');                                
+                        });
+
+                    }
+
                     setTimeout(() => {
                         $('#l-text').html('Fetching characters...');
                         setTimeout(() => {
@@ -134,27 +174,12 @@
                         }, 2500);
                     }, 2500);
                 }
+            
             });
-
-            const divs = document.getElementsByClassName("charSlot");
-            for(let i = 0; i < 4; i++) {
-                // console.log(divs[i])
-                $(divs[i]).hover(() => {
-                    $(divs[i]).css('opacity', '0.25');
-                }, () => {
-                    $(divs[i]).css('opacity', '0.75');
-                });
-
-                $(divs[i]).click(() => {
-                    // alert('Create Slot ' + i+1)
-                    $('#charForm').modal('toggle');
-                });
-
-            }
 
             $("#charAForm").submit((e) => {
                 e.preventDefault();
-                console.log($("#charName").val() + ' ' + $("#charSName").val() + ' ' + $("#charAge").val())
+                // console.log($("#charName").val() + ' ' + $("#charSName").val() + ' ' + $("#charAge").val())
                 $('#charForm').modal('toggle');
                 $('#index2').hide();
                 $('#l-text').html('Creating character...');
@@ -166,25 +191,6 @@
                     }, 2500)
                 }, 2500);
             });
-
-            // $('#charConf').click(() => {
-                
-            // });
-
-            // let create = document.getElementsByClassName("createChar");
-            // for(let i = 0; i < 4; i++) {
-            //     // console.log(divs[i])
-            //     $(create[i]).click(() => {
-            //         alert('teste')
-            //     });
-            // }
-
-            // 
-            // console.log(divs[0].getAttribute('data-slot'))
-
-            // $('#charSlot').hover(() => {
-            //    alert('oi')
-            // });
         });
     </script>
 </body>
