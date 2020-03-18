@@ -105,7 +105,7 @@
                     <p>Are you sure you want to delete this character? This action cannot be undone.</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="charDelConfBtn" class="btn btn-danger">Delete</button>
+                    <button type="button" id="charDel2ConfBtn" class="btn btn-danger">Delete</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
@@ -120,11 +120,12 @@
         $(() => {
             let ok = false;
             let selected = -1
-            let chars = [['John Doe', '23', 'Male'], null, ['John Doe2', '24', 'Male'], null]
+            let chars = [['John Doe', '23', 'Male'], ['John Doe', '23', 'Male'], ['John Doe2', '24', 'Male'], null]
 
             const select = (i) => selected = i;
-            const remove = (i) => {
+            const remove = () => {
                 chars[selected] = null;
+                console.log(selected)
                 selected = -1;
                 
                 // Calls loading screen
@@ -161,6 +162,8 @@
                                     '<h5 class="createChar card-title">' + chars[i][0] + '</h5>' +
                                     '<hr>' +
                                     '<p class="lead">Age: ' + chars[i][1] + '</p>' +
+                                    '<p class="lead">CID: ' + chars[i][1] + '</p>' +
+                                    '<p class="lead">Phone: ' + chars[i][1] + '</p>' +
                                     '<p class="lead">Gender: ' + chars[i][2] + '</p>' +
                                 '</div>' +
                                 '<div class="card-footer">' +
@@ -175,26 +178,6 @@
                 
                 fun2();
             }
-
-            document.addEventListener('keydown', (key) => {
-                if (key.which === 13 && ok === false) {
-                    // Starts loading screen
-                    ok = true;
-                    $('#index').hide();
-                    $('#loading').show();
-                    
-                    loadChars();
-
-                    // Changes loading text
-                    setTimeout(() => {
-                        $('#l-text').html('Fetching characters...');
-                        setTimeout(() => {
-                            $('#loading').hide();
-                            $('#index2').show();
-                        }, 2500);
-                    }, 2500);
-                }
-            });
 
             const fun2 = () => {
                 const play = document.getElementsByClassName('charPlay');
@@ -229,9 +212,31 @@
                         $('#charForm').modal('show');                                
                     });
                 }
-
-                $('#charDelConfBtn').click(() => remove() )
             }
+
+            $('#charDel2ConfBtn').click(() => {
+                remove();
+            })
+
+            document.addEventListener('keydown', (key) => {
+                if (key.which === 13 && ok === false) {
+                    // Starts loading screen
+                    ok = true;
+                    $('#index').hide();
+                    $('#loading').show();
+                    
+                    loadChars();
+
+                    // Changes loading text
+                    setTimeout(() => {
+                        $('#l-text').html('Fetching characters...');
+                        setTimeout(() => {
+                            $('#loading').hide();
+                            $('#index2').show();
+                        }, 2500);
+                    }, 2500);
+                }
+            });
 
             // Callback from the newChar form SUBMIT
             $('#charAForm').submit((e) => {
