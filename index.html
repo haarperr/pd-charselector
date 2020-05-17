@@ -4,30 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
     <style>
+        body {
+            display: none;
+            background: rgba(0, 0, 0, 0);
+        }
         .charSlot {
             opacity: 0.75;
         }
         .newChar {
             cursor: pointer;
         }
+        #index .card, #index .jumbotron{
+            background: rgba(0, 0, 0, 0.45);
+        }
     </style>
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
     <div id="index">
-        <div class="jumbotron mt-5 bg-dark text-light">
-            <img class="d-flex mx-auto" src="./img/logo.png" style="width: 128px;"/>
+        <div class="jumbotron mt-5 text-light" style="border-top: 2px solid rgba(100, 149, 237, 0.65); border-bottom: 2px solid rgba(100, 149, 237, 0.65);">
+            <img class="d-flex mx-auto" src="./logo.png" style="width: 128px;"/>
             <h1 class="text-center">Welcome to <span style="color: cornflowerblue;">Paradise RP</span></h1>
             <h3 class="text-center">Press <span style="color: cornflowerblue;">ENTER</span> to begin.</h3>
         </div>
         
-        <div class="card mx-auto bg-dark text-light" style="width: 40%;">
+        <div class="card mx-auto text-light" style="width: 40%;">
             <div class="card-body">
-                <h5 class="card-title text-center" style="color: cornflowerblue; margin-bottom: -.75rem;">Changelog/Rules</h5>
+                <h5 class="card-title text-center" style="color: cornflowerblue; ">Changelog/Rules</h5>
                 <hr class="mb-2">
-                <h6 class="card-subtitle mb-2">15/03/2020</h6>
+                <h6 class="card-subtitle mb-2">18/03/2020</h6>
                 <ul class="mt-2">
                     <li class="card-text" style="font-size: .75rem;">Welcome to Paradise Roleplay v2.</li>
                     <li class="card-text" style="font-size: .75rem;">Read all the rules.</li>
@@ -47,8 +54,8 @@
         </div> -->
 
         <div class="container mx-auto mt-5 text-center"> 
-            <div class="spinner-border mt-5" role="status"></div>          
-            <p id="l-text" class="mt-2">Fetching user data...</p>
+            <div class="spinner-border mt-5 text-light" role="status"></div>          
+            <h5 id="l-text" class="mt-2 text-light">Fetching user data...</h5>
         </div>
     </div>
 
@@ -112,42 +119,35 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <script>
         $(() => {
             let ok = false;
-            let selected = -1
-            let chars = [['John Doe', '23', 'Male'], ['John Doe', '23', 'Male'], ['John Doe2', '24', 'Male'], null]
+            let selected = -1;
+            let chars = [null, null, null, null];
 
             const select = (i) => selected = i;
             const remove = () => {
                 chars[selected] = null;
-                console.log(selected)
-                selected = -1;
                 
+                $.post('http://pd-charselector/DeleteCharacter',
+                    JSON.stringify({
+                        id: selected
+                    })
+                );
+
                 // Calls loading screen
-                $('#charDelConf').modal('hide');
-                $('#index2').hide();
-                $('#l-text').html('Deleting character...');
-                $('#loading').show();
-                setTimeout(() => {
-                    $('#l-text').html('Validating changes...');
-                    setTimeout(() => {
-                        $('#loading').hide(); 
-                        loadChars();
-                        $('#index2').show();
-                    }, 2500)
-                }, 2500);
             }
+            
             const loadChars = () => {
                 $('#index2').children('div').html('');
                 for(let i in chars) {
                     if(chars[i] === null){
                         $('#index2').children('div').append(
-                            '<div id="slot' + i + '" class="charSlot newChar card mx-auto my-auto text-center bg-dark text-light" style="width: 20vw; height: 50vh;">' +
+                            '<div class="charSlot newChar card mx-auto my-auto text-center bg-dark text-light" style="width: 20vw; height: 50vh;">' +
                                 '<div class="card-body">' +
                                     '<h5 class="createChar card-title">+</h5>' +
                                     '<hr>' +
@@ -156,15 +156,21 @@
                             '</div>'
                         );
                     } else {
+                        let gender;
+                        if (chars[i].gender) {
+                            gender = 'male';
+                        } else {
+                            gender = 'female';
+                        }
                         $('#index2').children('div').append(
-                            '<div id="slot' + i + '" class="charSlot card mx-auto my-auto text-center bg-dark text-light" style="width: 20vw; height: 50vh;">' +
+                            '<div id="slot' + chars[i].id + '" class="charSlot card mx-auto my-auto text-center bg-dark text-light" style="width: 20vw; height: 50vh;">' +
                                 '<div class="card-body">' +
-                                    '<h5 class="createChar card-title">' + chars[i][0] + '</h5>' +
+                                    '<h5 class="createChar card-title">' + chars[i].name + '</h5>' +
                                     '<hr>' +
-                                    '<p class="lead">Age: ' + chars[i][1] + '</p>' +
-                                    '<p class="lead">CID: ' + chars[i][1] + '</p>' +
-                                    '<p class="lead">Phone: ' + chars[i][1] + '</p>' +
-                                    '<p class="lead">Gender: ' + chars[i][2] + '</p>' +
+                                    '<p class="lead">Age: ' + chars[i].age + '</p>' +
+                                    '<p class="lead">CID: ' + chars[i].cid + '</p>' +
+                                    '<p class="lead">Phone: (' + chars[i].phone.substr(0, 3) + ') ' + chars[i].phone.substr(3, 3) + '-' + chars[i].phone.substr(6,4) + '</p>' +
+                                    '<p class="lead">Gender: ' + gender + '</p>' +
                                 '</div>' +
                                 '<div class="card-footer">' +
                                     '<button class="charPlay btn btn-success mr-3">Play</button>' +
@@ -172,7 +178,7 @@
                                 '</div>' +
                             '</div>'
                         );
-                        $('#slot' + i).removeClass('newChar')
+                        $('#slot' + chars[i].id).removeClass('newChar')
                     }
                 }
                 
@@ -183,7 +189,13 @@
                 const play = document.getElementsByClassName('charPlay');
                 for(let i=0;i<play.length;i++){
                     $(play[i]).click(() => {
-                        console.log('play ' + play[i].parentElement.parentElement.id)
+                        // console.log('play ' + play[i].parentElement.parentElement.id.split('t',2)[1])
+                        $.post('http://pd-charselector/CharacterChosen',
+                            JSON.stringify({
+                                id: play[i].parentElement.parentElement.id.split('t',2)[1]
+                            })
+                        );
+                        $('body').hide();
                         // Post Play
                     })
                 }
@@ -192,7 +204,7 @@
                 const del = document.getElementsByClassName('charDelete');
                 for(let i=0;i<del.length;i++){
                     $(del[i]).click(() => {
-                        console.log('delete ' + del[i].parentElement.parentElement.id.split('t',2)[1])
+                        // console.log('delete ' + del[i].parentElement.parentElement.id.split('t',2)[1])
                         // Post Delete
                         select(parseInt(del[i].parentElement.parentElement.id.split('t',2)[1]));
                         $('#charDelConf').modal('show');
@@ -209,7 +221,8 @@
                     });
 
                     $(divs[i]).click(() => {
-                        $('#charForm').modal('show');                                
+                        // console.log(parseInt(divs[i].id.split('t',2)[1]))
+                        $('#charForm').modal('show');
                     });
                 }
             }
@@ -238,6 +251,41 @@
                 }
             });
 
+            // Waits for client messages
+            window.addEventListener('message', (event) => {
+                if (event.data.action === 'openui') {
+                    ok = false;
+                    $('body').show();
+                    $('#index').show();
+                    $('#index2').hide();
+                    $('#loading').hide();
+                    if (event.data.characters.length > 0){
+                        $.each(event.data.characters, function(k,v){
+                            chars[k] = v
+                        })
+                    }
+                } else if (event.data.action === 'update') {
+                    chars = [null, null, null, null];
+                    if (event.data.characters.length > 0){
+                        $.each(event.data.characters, function(k,v){
+                            chars[k] = v
+                        })
+                    }
+                    $('#charDelConf').modal('hide');
+                    $('#index2').hide();
+                    $('#l-text').html('Deleting character...');
+                    $('#loading').show();
+                    setTimeout(() => {
+                        $('#l-text').html('Validating changes...');
+                        setTimeout(() => {
+                            $('#loading').hide(); 
+                            loadChars();
+                            $('#index2').show();
+                        }, 2500)
+                    }, 2500);
+                }
+            });
+
             // Callback from the newChar form SUBMIT
             $('#charAForm').submit((e) => {
                 e.preventDefault();
@@ -247,6 +295,11 @@
                 // Calls loading screen
                 $('#l-text').html('Creating character...');
                 $('#loading').show();
+                
+                let data = {slot: selected, name: $('#charName').val() + ' ' + $('#charSName').val(), age: $("#charAge").val(), gender: $("#charGender").val()}
+                $.post('http://pd-charselector/CharacterCreated',
+                    JSON.stringify({ fields: data })
+                );
                 setTimeout(() => {
                     $('#l-text').html('Validating changes...');
                     setTimeout(() => {
